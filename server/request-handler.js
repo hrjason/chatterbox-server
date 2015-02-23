@@ -49,10 +49,16 @@ var requestHandler = function(request, response) {
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
   // up in the browser.
-  //
+
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
+  //response.end("Hello, World!");
+
+  if(request.url === '/classes/messages') {
+    response.end('got it');
+  } else {
+    response.end('messed out');
+  }
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
