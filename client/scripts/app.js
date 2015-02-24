@@ -1,7 +1,7 @@
 var app = {
   lastCreated: '2015-02-17T00:50:32.494Z',
   currentRoom: undefined,
-  server: 'https://api.parse.com/1/classes/chatterbox',
+  server: 'http:/127.0.0.1:3000',
   rooms: {},
   friends: {},
 
@@ -111,7 +111,7 @@ var app = {
     };
 
     $.ajax({
-      url: context.server,
+      url: context.server + '/classes/messages',
       type: 'GET',
       data: data,
       success: function(response) {
@@ -143,7 +143,7 @@ var app = {
     var message = message || defaults;
 
     $.ajax({
-      url: context.server,
+      url: context.server + '/send',
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
