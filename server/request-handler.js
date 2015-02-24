@@ -55,7 +55,7 @@ var requestHandler = function(request, response) {
   //response.end("Hello, World!");
 
   if(request.url === '/classes/messages') {
-    response.end('got it');
+    response.end(JSON.stringify({name : 'json', age : 24}));
   } else {
     response.end('messed out');
   }
