@@ -18,17 +18,34 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+var results = [];
+
 var requestMethods = {
   POST : function(request, response, headers) {
+    // make sure POST reqest sent to correct URL
     if(request.url ==='/send') {
       response.writeHead(201, headers);
-      response.end('POST succeed');
+
+      // get data from request object
+      var newMessage = "";
+      request.on('data', function(data){
+        newMessage += data;
+      });
+
+      // when data finished, add object to results array
+      request.on('end', function(){
+        results.push(JSON.parse(newMessage));
+        console.log(results);
+      });
+      response.end(); // always end a response
+
     } else {
       response.writeHead(404, headers);
-      response.end('POST fail');
+      response.end();
     }
   },
   GET  : function(request, response, headers) {
+    // make sure GET request is to correct URL
     if(request.url === '/classes/messages') {
       response.writeHead(200, headers);
       response.end('GET succeed');
