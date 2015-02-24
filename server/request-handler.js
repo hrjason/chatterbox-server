@@ -20,11 +20,22 @@ var defaultCorsHeaders = {
 
 var results = [];
 
+var page;
+var fs = require('fs');
+fs.readFile ('../client/index.html', function(err, html){
+  page = html;
+});
+
+var css;
+var fs = require('fs');
+fs.readFile ('../client/styles/styles.css', function(err, page){
+  css = page;
+});
+
 var requestMethods = {
   POST : function(request, response, headers) {
     // make sure POST reqest sent to correct URL
     if(request.url ==='/send' || request.url === '/classes/room1') {
-      console.log(request.url);
       response.writeHead(201, headers);
 
       // get data from request object
@@ -49,7 +60,15 @@ var requestMethods = {
     if(request.url === '/classes/messages' || request.url === '/classes/room1') {
       response.writeHead(200, headers);
       response.end(JSON.stringify({results:results}));
-    } else {
+    } else if (request.url === '/') {
+      headers['Content-Type'] = "text/html";
+      response.end(page);
+    } else if (request.url === '/styles/styles.css') {
+      headers['Content-Type'] = "text/css";
+      response.end(css);
+    }
+
+    else {
       response.writeHead(404, headers);
       response.end('GET fail');
     }
