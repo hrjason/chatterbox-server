@@ -44,7 +44,7 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "text/plain";
+  headers['Content-Type'] = "application/json";
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -62,7 +62,15 @@ var requestHandler = function(request, response) {
   if(request.url === '/classes/messages') {
     response.end(JSON.stringify({results : []}));
   } else if (request.url === '/send') {
-    response.end(JSON.stringify({result: []}));
+    // response.end(JSON.stringify({result: []}));
+    // request.on('data', function(data) {
+    //   console.log("it works!");
+    // });
+    response.end();
+    console.log("in /send");
+    console.log(request.headers);
+    response.end('end of /send');
+
   } else {
     response.end('messed out');
   }
