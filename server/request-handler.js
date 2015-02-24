@@ -35,7 +35,6 @@ var requestMethods = {
       // when data finished, add object to results array
       request.on('end', function(){
         results.push(JSON.parse(newMessage));
-        console.log(results);
       });
       response.end(); // always end a response
 
@@ -48,7 +47,7 @@ var requestMethods = {
     // make sure GET request is to correct URL
     if(request.url === '/classes/messages') {
       response.writeHead(200, headers);
-      response.end('GET succeed');
+      response.end(JSON.stringify({results:results}));
     } else {
       response.writeHead(404, headers);
       response.end('GET fail');
