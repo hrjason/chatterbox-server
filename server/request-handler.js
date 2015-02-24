@@ -18,6 +18,31 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+var requestMethods = {
+  POST : function(request, response, headers) {
+    if(request.url ==='/send') {
+      response.writeHead(201, headers);
+      response.end('POST succeed');
+    } else {
+      response.writeHead(404, headers);
+      response.end('POST fail');
+    }
+  },
+  GET  : function(request, response, headers) {
+    if(request.url === '/classes/messages') {
+      response.writeHead(200, headers);
+      response.end('GET succeed');
+    } else {
+      response.writeHead(404, headers);
+      response.end('GET fail');
+    }
+  },
+  OPTIONS : function(request, response, headers) {
+    response.writeHead(200, headers);
+    response.end();
+  }
+};
+
 var requestHandler = function(request, response) {
 
   console.log("Serving request type " + request.method + " for url " + request.url);
@@ -27,53 +52,49 @@ var requestHandler = function(request, response) {
   headers['Content-Type'] = "application/json";
 
   var statusCode;
-  if(request.method === 'OPTIONS') {
+  requestMethods[request.method](request, response, headers);
 
-  }
+};
+  // // if(request.method === 'POST') {
+  // //   if(request.url ==='/send') {
+  // //     // you're cool
+  // //     statusCode = 201;
+  // //     response.writeHead(statusCode, headers);
+  // //     response.end('POST succeed');
+  // //   } else {
+  // //     // you're not cool
+  // //     statusCode = 404;
+  // //     response.writeHead(statusCode, headers);
+  // //     response.end('POST fail');
 
-  if(request.method === 'POST') {
-    if(request.url ==='/send') {
-      // you're cool
-      statusCode = 201;
-      response.writeHead(statusCode, headers);
-      response.end('POST succeed');
-    } else {
-      // you're not cool
-      statusCode = 404;
-      response.writeHead(statusCode, headers);
-      response.end('POST fail');
-
-    }
-  } else if(request.method === 'GET') {
-    if(request.url === '/classes/messages') {
-      // you're cool
-      statusCode = 200;
-      console.log('in get request');
-      response.writeHead(statusCode, headers);
-      response.end('GET succeed');
-    } else {
-      // your mom is cool
-      statusCode = 404;
-      console.log('404');
-      response.writeHead(statusCode, headers);
-      response.end('GET fail');
-    }
-  } else if (request.method === "OPTIONS") {
-    console.log("here!");
-    statusCode = 200;
-    // headers["'Allow'"] = 'GET,POST,OPTIONS';
-    console.log(statusCode, headers);
-    response.writeHead(statusCode, headers);
-    response.end();
-  } else {
-    // you're fucked
-    statusCode = 404;
-    response.writeHead(statusCode, headers);
-    response.end('Fail fail');
-  }
-
-
-
+  // //   }
+  // } else if(request.method === 'GET') {
+  //   if(request.url === '/classes/messages') {
+  //     // you're cool
+  //     statusCode = 200;
+  //     console.log('in get request');
+  //     response.writeHead(statusCode, headers);
+  //     response.end('GET succeed');
+  //   } else {
+  //     // your mom is cool
+  //     statusCode = 404;
+  //     console.log('404');
+  //     response.writeHead(statusCode, headers);
+  //     response.end('GET fail');
+  //   }
+  // } else if (request.method === "OPTIONS") {
+  //   console.log("here!");
+  //   statusCode = 200;
+  //   // headers["'Allow'"] = 'GET,POST,OPTIONS';
+  //   console.log(statusCode, headers);
+  //   response.writeHead(statusCode, headers);
+  //   response.end();
+  // } else {
+  //   // you're fucked
+  //   statusCode = 404;
+  //   response.writeHead(statusCode, headers);
+  //   response.end('Fail fail');
+  // }
   // if(request.url === '/classes/messages') {
   //   response.end(JSON.stringify({results : []}));
   // } else if (request.url === '/send') {
@@ -89,9 +110,6 @@ var requestHandler = function(request, response) {
   // } else {
   //   response.end('messed out');
   // }
-
-
-};
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
