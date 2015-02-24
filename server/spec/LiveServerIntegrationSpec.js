@@ -36,7 +36,7 @@ describe('server', function() {
 
   it('should accept POST requests to /send', function(done) {
     var requestParams = {method: 'POST',
-      uri: 'http://127.0.0.1:3000/classes/messages',
+      uri: 'http://127.0.0.1:3000/send',
       json: {
         username: 'Jono',
         message: 'Do my bidding!'}
