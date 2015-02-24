@@ -11,18 +11,36 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+var defaultCorsHeaders = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "access-control-allow-headers": "content-type, accept",
+  "access-control-max-age": 10 // Seconds.
+};
 
 var requestHandler = function(request, response) {
 
   console.log("Serving request type " + request.method + " for url " + request.url);
 
+  // Set default header values
+  var headers = defaultCorsHeaders;
+  headers['Content-Type'] = "application/json";
+
+  var statusCode;
+  if(request.method === 'OPTIONS') {
+
+  }
+
   if(request.method === 'POST') {
     if(request.url ==='/send') {
       // you're cool
       statusCode = 201;
+      response.writeHead(statusCode, headers);
       response.end('POST succeed');
     } else {
       // you're not cool
+      statusCode = 404;
+      response.writeHead(statusCode, headers);
       response.end('POST fail');
 
     }
@@ -30,35 +48,30 @@ var requestHandler = function(request, response) {
     if(request.url === '/classes/messages') {
       // you're cool
       statusCode = 200;
+      console.log('in get request');
+      response.writeHead(statusCode, headers);
       response.end('GET succeed');
     } else {
       // your mom is cool
+      statusCode = 404;
+      console.log('404');
+      response.writeHead(statusCode, headers);
       response.end('GET fail');
     }
+  } else if (request.method === "OPTIONS") {
+    console.log("here!");
+    statusCode = 200;
+    // headers["'Allow'"] = 'GET,POST,OPTIONS';
+    console.log(statusCode, headers);
+    response.writeHead(statusCode, headers);
+    response.end();
   } else {
     // you're fucked
     statusCode = 404;
+    response.writeHead(statusCode, headers);
     response.end('Fail fail');
   }
 
-  // // The outgoing status.
-  // var statusCode;
-  // if(request.url === '/send'){
-  //   statusCode = 201;
-  // } else {
-  //   statusCode = 200;
-  // }
-
-  // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
-
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "application/json";
-
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
 
 
   // if(request.url === '/classes/messages') {
@@ -89,12 +102,6 @@ var requestHandler = function(request, response) {
 //
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
-var defaultCorsHeaders = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "content-type, accept",
-  "access-control-max-age": 10 // Seconds.
-};
 
 exports.requestHandler = requestHandler;
 

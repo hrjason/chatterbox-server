@@ -1,7 +1,7 @@
 var app = {
   lastCreated: '2015-02-17T00:50:32.494Z',
   currentRoom: undefined,
-  server: 'http:/127.0.0.1:3000',
+  server: 'http://127.0.0.1:3000',
   rooms: {},
   friends: {},
 
@@ -9,7 +9,7 @@ var app = {
     var context = this;
     setInterval(function() {
       context.fetch();
-    }, 2000);
+    }, 5000);
 
     var filterRoom = function() {
       var $element = $(this);
@@ -106,8 +106,8 @@ var app = {
     }
 
     var data = {
-      order: '-createdAt',
-      where: where
+      // order: '-createdAt',
+      // where: where
     };
 
     $.ajax({
