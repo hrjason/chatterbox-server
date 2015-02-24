@@ -13,35 +13,45 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 var requestHandler = function(request, response) {
-  // Request and Response come from node's http module.
-  //
-  // They include information about both the incoming request, such as
-  // headers and URL, and about the outgoing response, such as its status
-  // and content.
-  //
-  // Documentation for both request and response can be found in the HTTP section at
-  // http://nodejs.org/documentation/api/
 
-  // Do some basic logging.
-  //
-  // Adding more logging to your server can be an easy way to get passive
-  // debugging help, but you should always be careful about leaving stray
-  // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  // The outgoing status.
-  var statusCode;
-  if(request.url === '/send'){
-    statusCode = 201;
+  if(request.method === 'POST') {
+    if(request.url ==='/send') {
+      // you're cool
+      statusCode = 201;
+      response.end('POST succeed');
+    } else {
+      // you're not cool
+      response.end('POST fail');
+
+    }
+  } else if(request.method === 'GET') {
+    if(request.url === '/classes/messages') {
+      // you're cool
+      statusCode = 200;
+      response.end('GET succeed');
+    } else {
+      // your mom is cool
+      response.end('GET fail');
+    }
   } else {
-    statusCode = 200;
+    // you're fucked
+    statusCode = 404;
+    response.end('Fail fail');
   }
+
+  // // The outgoing status.
+  // var statusCode;
+  // if(request.url === '/send'){
+  //   statusCode = 201;
+  // } else {
+  //   statusCode = 200;
+  // }
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
-  // Tell the client we are sending them plain text.
-  //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = "application/json";
@@ -50,30 +60,22 @@ var requestHandler = function(request, response) {
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
 
-  // Make sure to always call response.end() - Node may not send
-  // anything back to the client until you do. The string you pass to
-  // response.end() will be the body of the response - i.e. what shows
-  // up in the browser.
 
-  // Calling .end "flushes" the response's internal buffer, forcing
-  // node to actually send all the data over to the client.
-  //response.end("Hello, World!");
+  // if(request.url === '/classes/messages') {
+  //   response.end(JSON.stringify({results : []}));
+  // } else if (request.url === '/send') {
+  //   // response.end(JSON.stringify({result: []}));
+  //   // request.on('data', function(data) {
+  //   //   console.log("it works!");
+  //   // });
+  //   response.end();
+  //   console.log("in /send");
+  //   console.log(request.headers);
+  //   response.end('end of /send');
 
-  if(request.url === '/classes/messages') {
-    response.end(JSON.stringify({results : []}));
-  } else if (request.url === '/send') {
-    // response.end(JSON.stringify({result: []}));
-    // request.on('data', function(data) {
-    //   console.log("it works!");
-    // });
-    response.end();
-    console.log("in /send");
-    console.log(request.headers);
-    response.end('end of /send');
-
-  } else {
-    response.end('messed out');
-  }
+  // } else {
+  //   response.end('messed out');
+  // }
 
 
 };
