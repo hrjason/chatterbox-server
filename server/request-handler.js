@@ -30,7 +30,12 @@ var requestHandler = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
 
   // The outgoing status.
-  var statusCode = 200;
+  var statusCode;
+  if(request.url === '/send'){
+    statusCode = 201;
+  } else {
+    statusCode = 200;
+  }
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -55,10 +60,14 @@ var requestHandler = function(request, response) {
   //response.end("Hello, World!");
 
   if(request.url === '/classes/messages') {
-    response.end(JSON.stringify({name : 'json', age : 24}));
+    response.end(JSON.stringify({results : []}));
+  } else if (request.url === '/send') {
+    response.end(JSON.stringify({result: []}));
   } else {
     response.end('messed out');
   }
+
+
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
