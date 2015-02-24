@@ -23,7 +23,8 @@ var results = [];
 var requestMethods = {
   POST : function(request, response, headers) {
     // make sure POST reqest sent to correct URL
-    if(request.url ==='/send') {
+    if(request.url ==='/send' || request.url === '/classes/room1') {
+      console.log(request.url);
       response.writeHead(201, headers);
 
       // get data from request object
@@ -45,7 +46,7 @@ var requestMethods = {
   },
   GET  : function(request, response, headers) {
     // make sure GET request is to correct URL
-    if(request.url === '/classes/messages') {
+    if(request.url === '/classes/messages' || request.url === '/classes/room1') {
       response.writeHead(200, headers);
       response.end(JSON.stringify({results:results}));
     } else {
